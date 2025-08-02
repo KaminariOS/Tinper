@@ -85,6 +85,9 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
       onSwipe('right');
     } else if (info.offset.x < -threshold) {
       onSwipe('left');
+    } else {
+      // If not swiped far enough, animate back to center
+      x.set(0);
     }
   };
 
@@ -142,17 +145,24 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
             </div>
           </div>
           
-          {/* Remaining photos */}
+          {/* Interleaved photos and prompts */}
           {profile.photos.slice(1).map((photo, index) => (
-            <div key={index + 1} className="photo-item">
-              <img src={photo} alt={`${profile.name} photo ${index + 2}`} />
-            </div>
+            <React.Fragment key={`photo-${index + 1}`}>
+              {/* Show prompt before each photo (except first) */}
+              {index < profile.prompts.length && (
+                <div className="prompt">
+                  <p>{profile.prompts[index]}</p>
+                </div>
+              )}
+              <div className="photo-item">
+                <img src={photo} alt={`${profile.name} photo ${index + 2}`} />
+              </div>
+            </React.Fragment>
           ))}
-        </div>
-        
-        <div className="prompts-section">
-          {profile.prompts.map((prompt, index) => (
-            <div key={index} className="prompt">
+          
+          {/* Show remaining prompts if there are more prompts than photos */}
+          {profile.prompts.slice(profile.photos.length - 1).map((prompt, index) => (
+            <div key={`prompt-${profile.photos.length - 1 + index}`} className="prompt">
               <p>{prompt}</p>
             </div>
           ))}

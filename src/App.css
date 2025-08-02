@@ -197,6 +197,7 @@ body {
   align-items: center;
   padding: 8px 0;
   border-bottom: 2px solid #6c757d;
+  min-height: 32px;
 }
 
 .bio-item:last-child {
@@ -207,11 +208,17 @@ body {
   font-weight: 600;
   color: #495057;
   font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 .bio-value {
   color: #212529;
   font-size: 0.9rem;
+  text-align: right;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 50%;
 }
 
 .prompts-section {
@@ -343,10 +350,15 @@ body {
   
   .bio-item {
     padding: 6px 0;
+    min-height: 28px;
   }
   
   .bio-label, .bio-value {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+  }
+  
+  .bio-value {
+    max-width: 45%;
   }
 }
 
