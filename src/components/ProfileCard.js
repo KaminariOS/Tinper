@@ -65,26 +65,51 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
           </div>
           
           {/* Interleaved photos and prompts */}
-          {profile.photos.slice(1).map((photo, index) => (
-            <React.Fragment key={`photo-${index + 1}`}>
-              {/* Show prompt before each photo (except first) */}
-              {index < profile.prompts.length && (
-                <div className="prompt">
-                  <p>{profile.prompts[index]}</p>
+          {profile.photos.slice(1).map((photo, index) => {
+            const promptObj = profile.prompts[index];
+            let prompt = null, answer = null;
+            if (promptObj) {
+              const splitIdx = promptObj.indexOf(':');
+              if (splitIdx !== -1) {
+                prompt = promptObj.slice(0, splitIdx);
+                answer = promptObj.slice(splitIdx + 1).trim();
+              } else {
+                answer = promptObj;
+              }
+            }
+            return (
+              <React.Fragment key={`photo-${index + 1}`}>
+                {/* Show prompt before each photo (except first) */}
+                {promptObj && (
+                  <div className="prompt-block">
+                    {prompt && <div className="prompt-question">{prompt}</div>}
+                    <div className="prompt-answer">{answer}</div>
+                  </div>
+                )}
+                <div className="photo-item">
+                  <img src={photo} alt={`${profile.name} photo ${index + 2}`} />
                 </div>
-              )}
-              <div className="photo-item">
-                <img src={photo} alt={`${profile.name} photo ${index + 2}`} />
-              </div>
-            </React.Fragment>
-          ))}
-          
+              </React.Fragment>
+            );
+          })}
+
           {/* Show remaining prompts if there are more prompts than photos */}
-          {profile.prompts.slice(profile.photos.length - 1).map((prompt, index) => (
-            <div key={`prompt-${profile.photos.length - 1 + index}`} className="prompt">
-              <p>{prompt}</p>
-            </div>
-          ))}
+          {profile.prompts.slice(profile.photos.length - 1).map((promptObj, index) => {
+            let prompt = null, answer = null;
+            const splitIdx = promptObj.indexOf(':');
+            if (splitIdx !== -1) {
+              prompt = promptObj.slice(0, splitIdx);
+              answer = promptObj.slice(splitIdx + 1).trim();
+            } else {
+              answer = promptObj;
+            }
+            return (
+              <div key={`prompt-${profile.photos.length - 1 + index}`} className="prompt-block">
+                {prompt && <div className="prompt-question">{prompt}</div>}
+                <div className="prompt-answer">{answer}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import { Heart, X, Instagram, Zap, Users, Settings, Send, ArrowLeft } from 'lucide-react';
 import './App.css';
 import profilesData from './babe_images.json';
+import hingePrompts from './hinge_prompts.json';
 import ProfileCard from './components/ProfileCard';
 
 // IndexedDB utilities
@@ -69,6 +70,20 @@ const getSwipesByDirection = async (direction) => {
 };
 
 // Transform JSON data to match the expected profile structure
+function getRandomPrompts(promptsArray, n) {
+  const used = new Set();
+  const result = [];
+  while (result.length < n && used.size < promptsArray.length) {
+    const idx = Math.floor(Math.random() * promptsArray.length);
+    if (!used.has(idx)) {
+      used.add(idx);
+      const promptObj = promptsArray[idx];
+      result.push(`${promptObj.prompt}: ${promptObj.answer}`);
+    }
+  }
+  return result;
+}
+
 const sampleProfiles = profilesData.map((profile, index) => ({
   id: index + 1,
   name: profile.name,
@@ -83,11 +98,7 @@ const sampleProfiles = profilesData.map((profile, index) => ({
   mainPhoto: profile.images?.[0] || 'https://via.placeholder.com/400x600',
   photos: profile.images || ['https://via.placeholder.com/400x600'],
   instagram: profile.original_data?.Instagram || null,
-  prompts: [
-    `My profession: ${profile.original_data?.Personal?.Professions || 'Unknown'}`,
-    `From: ${profile.original_data?.Personal?.Birthplace || 'Unknown'}`,
-    `Body type: ${profile.original_data?.Body?.['Body type'] || 'Unknown'}`
-  ]
+  prompts: getRandomPrompts(hingePrompts, 3)
 }));
 
 
