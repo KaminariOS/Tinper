@@ -197,7 +197,7 @@ function App() {
     <div className="App">
       <div className="app-container">
         <header className="app-header">
-          <h1>Hinge Clone</h1>
+          <h1>Tinper</h1>
           <p>Drag the card left or right to like or pass</p>
         </header>
 
