@@ -79,6 +79,7 @@ const sampleProfiles = profilesData.map((profile, index) => ({
   hairColor: profile.original_data?.Body?.['Hair color'] || 'Unknown',
   eyeColor: profile.original_data?.Body?.['Eye color'] || 'Unknown',
   ethnicity: profile.original_data?.Personal?.Ethnicity || 'Unknown',
+  birthplace: profile.original_data?.Personal?.Birthplace || 'Unknown',
   mainPhoto: profile.images?.[0] || 'https://via.placeholder.com/400x600',
   photos: profile.images || ['https://via.placeholder.com/400x600'],
   instagram: profile.original_data?.Instagram || null,
@@ -184,80 +185,6 @@ function ChatWindow({ match, onClose, onViewProfile }) {
   );
 }
 
-// Profile Detail Modal Component (renamed and simplified)
-function ProfileDetailModal({ match, onClose }) {
-  if (!match) return null;
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
-          <X size={24} />
-        </button>
-        <div className="match-detail">
-          <div className="match-photos">
-            {match.profileData.photos.map((photo, index) => (
-              <img key={index} src={photo} alt={`${match.name} photo ${index + 1}`} />
-            ))}
-          </div>
-          <div className="match-info-detail">
-            <h2>{match.profileData.name}, {match.profileData.age}</h2>
-            <p className="location">{match.profileData.location}</p>
-            
-            <div className="bio-section">
-              <div className="bio-grid">
-                <div className="bio-item">
-                  <span className="bio-label">Nationality:</span>
-                  <span className="bio-value">{match.profileData.nationality}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Height:</span>
-                  <span className="bio-value">{match.profileData.height}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Hair:</span>
-                  <span className="bio-value">{match.profileData.hairColor}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Eyes:</span>
-                  <span className="bio-value">{match.profileData.eyeColor}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Ethnicity:</span>
-                  <span className="bio-value">{match.profileData.ethnicity}</span>
-                </div>
-              </div>
-            </div>
-
-            {match.profileData.prompts.map((prompt, index) => (
-              <div key={index} className="prompt">
-                <p>{prompt}</p>
-              </div>
-            ))}
-
-            {match.profileData.instagram && (
-              <div className="instagram-link">
-                <a 
-                  href={match.profileData.instagram} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="instagram-btn"
-                >
-                  <Instagram size={20} />
-                  <span>Follow on Instagram</span>
-                </a>
-              </div>
-            )}
-
-            <div className="match-date">
-              <small>Matched on {new Date(match.timestamp).toLocaleDateString()}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // Matches component
 function MatchesTab() {
@@ -556,10 +483,6 @@ function App() {
       case 'swipe':
         return (
           <div className="swipe-tab">
-            <header className="app-header">
-              <h1>Tinper</h1>
-              <p>Drag the card left or right to like or pass</p>
-            </header>
 
             <div className="cards-container">
               <div className="cards-stack">
@@ -591,17 +514,6 @@ function App() {
                     onSwipe={handleSwipe}
                   />
                 </motion.div>
-              </div>
-            </div>
-
-            <div className="swipe-instructions">
-              <div className="instruction">
-                <X size={20} />
-                <span>Drag left to pass</span>
-              </div>
-              <div className="instruction">
-                <Heart size={20} />
-                <span>Drag right to like</span>
               </div>
             </div>
           </div>

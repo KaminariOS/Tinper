@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Heart, X, Instagram } from 'lucide-react';
+import BioSection from './BioSection';
 
 function ProfileCard({ profile, onSwipe, isNext = false }) {
   const x = useMotionValue(0);
@@ -34,19 +35,17 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
       exit={{ scale: 0.8, opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="card-header">
-        <div className="profile-info">
-          <h2>{profile.name}, {profile.age}</h2>
-          <p>{profile.location}</p>
-        </div>
-      </div>
-
       <div className="card-content">
         <div className="photos-gallery">
           {/* First photo with bio below */}
           <div className="first-photo-section">
             <div className="photo-item">
               <img src={profile.photos[0]} alt={`${profile.name} photo 1`} />
+            </div>
+            {/* Profile info below first photo */}
+            <div className="profile-info">
+              <h2>{profile.name}, {profile.age}</h2>
+              <p>{profile.location}</p>
             </div>
             {/* Instagram link */}
             {profile.instagram && (
@@ -58,34 +57,11 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
                   className="instagram-btn"
                 >
                   <Instagram size={20} />
-                  <span>Follow on Instagram</span>
+                  <span>Instagram</span>
                 </a>
               </div>
             )}
-            <div className="bio-section">
-              <div className="bio-grid">
-                <div className="bio-item">
-                  <span className="bio-label">Nationality:</span>
-                  <span className="bio-value">{profile.nationality}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Height:</span>
-                  <span className="bio-value">{profile.height}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Hair:</span>
-                  <span className="bio-value">{profile.hairColor}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Eyes:</span>
-                  <span className="bio-value">{profile.eyeColor}</span>
-                </div>
-                <div className="bio-item">
-                  <span className="bio-label">Ethnicity:</span>
-                  <span className="bio-value">{profile.ethnicity}</span>
-                </div>
-              </div>
-            </div>
+            <BioSection profile={profile} />
           </div>
           
           {/* Interleaved photos and prompts */}

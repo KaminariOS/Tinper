@@ -88,18 +88,18 @@ body {
 }
 
 .profile-card {
-  width: 90%;
-  height: 80vh;
+  width: 100%;
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
   cursor: grab;
   user-select: none;
-  touch-action: pan-y;
+  position: relative;
+  margin: 0 auto;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 
 .profile-card:active {
@@ -133,6 +133,8 @@ body {
   display: flex;
   flex-direction: column;
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .photos-gallery {
@@ -170,39 +172,26 @@ body {
 .bio-section {
   background: #f8f9fa;
   border-radius: 12px;
-  padding: 16px;
-  border-left: 4px solid #667eea;
+  padding: 0px;
 }
 
-.bio-grid {
+.bio-unified-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  position: relative;
-}
-
-.bio-grid::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
+  gap: 1px;
   background: #6c757d;
-  transform: translateX(-50%);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #6c757d;
 }
 
-.bio-item {
+.bio-grid-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 2px solid #6c757d;
-  min-height: 32px;
-}
-
-.bio-item:last-child {
-  border-bottom: none;
+  padding: 12px;
+  background: #f8f9fa;
+  min-height: 40px;
 }
 
 .bio-label {
@@ -214,13 +203,14 @@ body {
 }
 
 .bio-value {
-  color: #212529;
-  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
   text-align: right;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  word-break: break-word;
   max-width: 50%;
 }
+
+
 
 .prompts-section {
   padding: 20px;
