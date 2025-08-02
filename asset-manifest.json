@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/tinper/static/css/main.bc3426cc.css",
-    "main.js": "/tinper/static/js/main.c8a39cfa.js",
+    "main.css": "/tinper/static/css/main.5436fdac.css",
+    "main.js": "/tinper/static/js/main.8f7ceb92.js",
     "static/js/453.5a5d2d71.chunk.js": "/tinper/static/js/453.5a5d2d71.chunk.js",
     "index.html": "/tinper/index.html",
-    "main.bc3426cc.css.map": "/tinper/static/css/main.bc3426cc.css.map",
-    "main.c8a39cfa.js.map": "/tinper/static/js/main.c8a39cfa.js.map",
+    "main.5436fdac.css.map": "/tinper/static/css/main.5436fdac.css.map",
+    "main.8f7ceb92.js.map": "/tinper/static/js/main.8f7ceb92.js.map",
     "453.5a5d2d71.chunk.js.map": "/tinper/static/js/453.5a5d2d71.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bc3426cc.css",
-    "static/js/main.c8a39cfa.js"
+    "static/css/main.5436fdac.css",
+    "static/js/main.8f7ceb92.js"
   ]
 }
