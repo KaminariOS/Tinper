@@ -17,7 +17,11 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
       onSwipe('left');
     } else {
       // If not swiped far enough, animate back to center
-      x.set(0);
+ console.log('Card snapped back to center.')
+  x.stop(); // Stop any ongoing animation
+    x.set(info.point.x); // Set current position
+    x.set(0, { type: "spring", stiffness: 300, damping: 30 });
+      // x.set(0);
     }
   };
 
