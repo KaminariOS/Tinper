@@ -213,7 +213,7 @@ function ChatWindow({ match, onClose, onViewProfile }) {
 
 
 // Matches component
-function MatchesTab() {
+function MatchesTab({ onUnmatch }) {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState(null);
@@ -234,6 +234,10 @@ function MatchesTab() {
     await removeSwipeFromDB(profileName);
     // Refresh the matches list
     loadMatches();
+    // Notify parent component to update swiped names
+    if (onUnmatch) {
+      onUnmatch(profileName);
+    }
   };
 
   if (loading) {
@@ -484,9 +488,32 @@ function App() {
     minAge: 18,
     maxAge: 50
   });
+  const [swipedNames, setSwipedNames] = useState(new Set());
 
-  // Filter profiles based on current filters
+  // Load swiped names from IndexedDB on component mount
+  React.useEffect(() => {
+    const loadSwipedNames = async () => {
+      try {
+        const leftSwipes = await getSwipesByDirection('left');
+        const rightSwipes = await getSwipesByDirection('right');
+        const allSwipes = [...leftSwipes, ...rightSwipes];
+        const swipedNamesSet = new Set(allSwipes.map(swipe => swipe.name));
+        setSwipedNames(swipedNamesSet);
+      } catch (error) {
+        console.error('Error loading swiped names:', error);
+      }
+    };
+    
+    loadSwipedNames();
+  }, []);
+
+  // Filter profiles based on current filters and swiped names
   const filteredProfiles = sampleProfiles.filter(profile => {
+    // Skip profiles that have already been swiped
+    if (swipedNames.has(profile.name)) {
+      return false;
+    }
+    
     // Nationality filter
     if (filters.nationality && profile.nationality !== filters.nationality) {
       return false;
@@ -506,13 +533,16 @@ function App() {
   });
 
   // Use filtered profiles or fallback to all profiles if no matches
-  const profilesToShow = filteredProfiles.length > 0 ? filteredProfiles : sampleProfiles;
+  const profilesToShow = filteredProfiles.length > 0 ? filteredProfiles : sampleProfiles.filter(profile => !swipedNames.has(profile.name));
 
   const handleSwipe = async (direction) => {
     const currentProfile = profilesToShow[currentProfileIndex];
     
     // Store swipe data in IndexedDB
     await addSwipeToDB(direction, currentProfile);
+    
+    // Update swiped names set
+    setSwipedNames(prev => new Set(prev).add(currentProfile.name));
     
     // Move to next profile
     setCurrentProfileIndex((prev) => (prev + 1) % profilesToShow.length);
@@ -563,7 +593,13 @@ function App() {
           </div>
         );
       case 'matches':
-        return <MatchesTab />;
+        return <MatchesTab onUnmatch={(profileName) => {
+          setSwipedNames(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(profileName);
+            return newSet;
+          });
+        }} />;
       case 'settings':
         return <SettingsTab filters={filters} setFilters={setFilters} />;
       default:
