@@ -409,21 +409,22 @@ body {
 .match-card {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 12px;
+  padding: 0;
   text-align: center;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.2s ease, background 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.match-card.clickable {
+.match-card-content {
+  padding: 12px;
   cursor: pointer;
 }
 
-.match-card.clickable:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.match-card-content:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .match-card img {
@@ -448,6 +449,26 @@ body {
 .match-info small {
   font-size: 0.75rem;
   opacity: 0.6;
+}
+
+.unmatch-btn {
+  background: rgba(255, 68, 88, 0.2);
+  color: #ff4458;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: 0 0 12px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.unmatch-btn:hover {
+  background: rgba(255, 68, 88, 0.3);
 }
 
 .stats-section {

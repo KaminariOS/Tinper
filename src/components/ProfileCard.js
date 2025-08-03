@@ -50,7 +50,7 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
             <div className="profile-info">
               <h2>
                 {profile.name}
-                {profile.professions.toLowerCase().match(/adult|porn/) && ' 🔥'}
+                {profile.ps && ' 🔥'}
                 , {profile.age}
               </h2>
               <p>{profile.location}</p>

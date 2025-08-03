@@ -69,6 +69,19 @@ const getSwipesByDirection = async (direction) => {
   }
 };
 
+const removeSwipeFromDB = async (profileName) => {
+  try {
+    const db = await initDB();
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    
+    await store.delete(profileName);
+    console.log(`Removed swipe for ${profileName} from IndexedDB`);
+  } catch (error) {
+    console.error('Error removing swipe from IndexedDB:', error);
+  }
+};
+
 // Transform JSON data to match the expected profile structure
 function getRandomPrompts(promptsArray, n) {
   const used = new Set();
@@ -99,6 +112,7 @@ const sampleProfiles = profilesData.map((profile, index) => ({
   photos: profile.images || ['https://via.placeholder.com/400x600'],
   instagram: profile.original_data?.Instagram || null,
   professions: profile.original_data?.Personal?.Professions || 'Unknown',
+  ps: profile.original_data?.Personal?.Professions.toLowerCase().match(/adult|porn/),
   prompts: getRandomPrompts(hingePrompts, 3)
 }));
 
@@ -206,14 +220,21 @@ function MatchesTab() {
   const [showProfileCard, setShowProfileCard] = useState(false);
   const [chatMatch, setChatMatch] = useState(null);
 
+  const loadMatches = async () => {
+    const rightSwipes = await getSwipesByDirection('right');
+    setMatches(rightSwipes);
+    setLoading(false);
+  };
+
   React.useEffect(() => {
-    const loadMatches = async () => {
-      const rightSwipes = await getSwipesByDirection('right');
-      setMatches(rightSwipes);
-      setLoading(false);
-    };
     loadMatches();
   }, []);
+
+  const handleUnmatch = async (profileName) => {
+    await removeSwipeFromDB(profileName);
+    // Refresh the matches list
+    loadMatches();
+  };
 
   if (loading) {
     return (
@@ -238,14 +259,25 @@ function MatchesTab() {
               <div 
                 key={match.name} 
                 className="match-card clickable" 
-                onClick={() => setChatMatch(match)}
               >
-                <img src={match.profileData.mainPhoto} alt={match.name} />
-                <div className="match-info">
-                  <h3>{match.profileData.name}</h3>
-                  <p>{match.profileData.age} years old</p>
-                  <small>Matched on {new Date(match.timestamp).toLocaleDateString()}</small>
+                <div className="match-card-content" onClick={() => setChatMatch(match)}>
+                  <img src={match.profileData.mainPhoto} alt={match.name} />
+                  <div className="match-info">
+                    <h3>{match.profileData.name}</h3>
+                    <p>{match.profileData.age} years old</p>
+                    <small>Matched on {new Date(match.timestamp).toLocaleDateString()}</small>
+                  </div>
                 </div>
+                <button 
+                  className="unmatch-btn" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUnmatch(match.name);
+                  }}
+                >
+                  <X size={16} />
+                  Unmatch
+                </button>
               </div>
             ))}
           </div>
