@@ -44,7 +44,11 @@ function ProfileCard({ profile, onSwipe, isNext = false }) {
             </div>
             {/* Profile info below first photo */}
             <div className="profile-info">
-              <h2>{profile.name}, {profile.age}</h2>
+              <h2>
+                {profile.name}
+                {profile.professions.toLowerCase().match(/adult|porn/) && ' 🔥'}
+                , {profile.age}
+              </h2>
               <p>{profile.location}</p>
             </div>
             {/* Instagram link */}

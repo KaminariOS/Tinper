@@ -98,6 +98,7 @@ const sampleProfiles = profilesData.map((profile, index) => ({
   mainPhoto: profile.images?.[0] || 'https://via.placeholder.com/400x600',
   photos: profile.images || ['https://via.placeholder.com/400x600'],
   instagram: profile.original_data?.Instagram || null,
+  professions: profile.original_data?.Personal?.Professions || 'Unknown',
   prompts: getRandomPrompts(hingePrompts, 3)
 }));
 
