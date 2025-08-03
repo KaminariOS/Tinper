@@ -7,6 +7,7 @@ import hingePrompts from './hinge_prompts.json';
 import initiationMessages from './initiation_messages.json';
 import ProfileCard from './components/ProfileCard';
 import ChatWindow from './components/ChatWindow';
+import MatchCard from './components/MatchCard';
 
 // IndexedDB utilities
 const DB_NAME = 'SwipeAppDB';
@@ -230,29 +231,16 @@ function MatchesTab({ onUnmatch }) {
         ) : (
           <div className="matches-grid">
             {matches.map((match) => (
-              <div 
-                key={match.name} 
-                className="match-card clickable" 
-              >
-                <div className="match-card-content" onClick={() => setChatMatch(match)}>
-                  <img src={match.profileData.mainPhoto} alt={match.name} />
-                  <div className="match-info">
-                    <h3>{match.profileData.name}</h3>
-                    <p>{match.profileData.age} years old</p>
-                    <small>Matched on {new Date(match.timestamp).toLocaleDateString()}</small>
-                  </div>
-                </div>
-                <button 
-                  className="unmatch-btn" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUnmatch(match.name);
-                  }}
-                >
-                  <X size={16} />
-                  Unmatch
-                </button>
-              </div>
+              <MatchCard
+                key={match.name}
+                match={match}
+                onChat={setChatMatch}
+                onUnmatch={handleUnmatch}
+                onViewProfile={() => {
+                  setSelectedMatch(match);
+                  setShowProfileCard(true);
+                }}
+              />
             ))}
           </div>
         )}
