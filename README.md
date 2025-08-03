@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# Tinper: an dating app simulator for collectors
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with Cursor.ai and Windsurf.
+
+Swipe right on real girls you like, and initiate a conversation that goes nowhere!
 
 ## Available Scripts
 
