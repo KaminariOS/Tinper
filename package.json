@@ -2,7 +2,7 @@
   "name": "tinper",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kaminarios.github.io/tinper",
+  "homepage": "https://kaminarios.github.io/Tinper",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
