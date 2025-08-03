@@ -4,6 +4,7 @@ import { Heart, X, Instagram, Zap, Users, Settings, Send, ArrowLeft } from 'luci
 import './App.css';
 import profilesData from './babe_images.json';
 import hingePrompts from './hinge_prompts.json';
+import initiationMessages from './initiation_messages.json';
 import ProfileCard from './components/ProfileCard';
 
 // IndexedDB utilities
@@ -124,7 +125,7 @@ function ChatWindow({ match, onClose, onViewProfile }) {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hey! We matched! 🎉",
+      text: initiationMessages[Math.floor(Math.random() * initiationMessages.length)],
       sender: 'them',
       timestamp: new Date(Date.now() - 3600000) // 1 hour ago
     }
