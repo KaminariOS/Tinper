@@ -50,6 +50,18 @@ body {
   font-weight: 400;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  padding: 0px;
+}
+
+.logo-container img {
+  width: 100px;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
 .cards-container {
   flex: 1;
   display: flex;
@@ -672,7 +684,7 @@ body {
 .swipe-tab {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 80px); /* Full height minus nav bar */
+  height: calc(100vh - 180px); /* Full height minus nav bar */
   padding-bottom: 0;
 }
 

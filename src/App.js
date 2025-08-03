@@ -611,7 +611,12 @@ function App() {
   return (
     <div className="App">
       <div className="app-container">
+        <div className="logo-container">
+          <img src={`${process.env.PUBLIC_URL}/favicon-96x96-removebg-preview.png`} alt="Logo" />
+        </div>
         {renderTabContent()}
+        
+        
         
         {/* Bottom Navigation */}
         <nav className="bottom-nav">
