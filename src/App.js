@@ -6,11 +6,13 @@ import profilesData from './babe_images.json';
 import hingePrompts from './hinge_prompts.json';
 import initiationMessages from './initiation_messages.json';
 import ProfileCard from './components/ProfileCard';
+import ChatWindow from './components/ChatWindow';
 
 // IndexedDB utilities
 const DB_NAME = 'SwipeAppDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORE_NAME = 'swipes';
+const CHAT_STORE_NAME = 'chatMessages';
 
 const initDB = () => {
   return new Promise((resolve, reject) => {
@@ -25,6 +27,13 @@ const initDB = () => {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'name' });
         store.createIndex('direction', 'direction', { unique: false });
         store.createIndex('profileId', 'profileId', { unique: false });
+      }
+      
+      // Create chat messages store if it doesn't exist
+      if (!db.objectStoreNames.contains(CHAT_STORE_NAME)) {
+        const chatStore = db.createObjectStore(CHAT_STORE_NAME, { keyPath: 'id', autoIncrement: true });
+        chatStore.createIndex('matchName', 'matchName', { unique: false });
+        chatStore.createIndex('timestamp', 'timestamp', { unique: false });
       }
     };
   });
@@ -83,6 +92,50 @@ const removeSwipeFromDB = async (profileName) => {
   }
 };
 
+// Chat message IndexedDB functions
+const saveChatMessageToDB = async (matchName, messageData) => {
+  try {
+    const db = await initDB();
+    const transaction = db.transaction([CHAT_STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(CHAT_STORE_NAME);
+    
+    const messageRecord = {
+      matchName: matchName,
+      ...messageData,
+      timestamp: new Date().toISOString()
+    };
+    
+    await store.add(messageRecord);
+    console.log(`Added chat message for ${matchName} to IndexedDB`);
+  } catch (error) {
+    console.error('Error adding chat message to IndexedDB:', error);
+  }
+};
+
+const getChatMessagesFromDB = async (matchName) => {
+  try {
+    const db = await initDB();
+    const transaction = db.transaction([CHAT_STORE_NAME], 'readonly');
+    const store = transaction.objectStore(CHAT_STORE_NAME);
+    const index = store.index('matchName');
+    
+    return new Promise((resolve, reject) => {
+      const request = index.getAll(matchName);
+      request.onsuccess = () => {
+        // Sort messages by timestamp
+        const messages = request.result.sort((a, b) => 
+          new Date(a.timestamp) - new Date(b.timestamp)
+        );
+        resolve(messages);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error(`Error getting chat messages from IndexedDB:`, error);
+    return [];
+  }
+};
+
 // Transform JSON data to match the expected profile structure
 function getRandomPrompts(promptsArray, n) {
   const used = new Set();
@@ -117,100 +170,6 @@ const sampleProfiles = profilesData.map((profile, index) => ({
   prompts: getRandomPrompts(hingePrompts, 3)
 }));
 
-
-
-// Chat Window Component
-function ChatWindow({ match, onClose, onViewProfile }) {
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: initiationMessages[Math.floor(Math.random() * initiationMessages.length)],
-      sender: 'them',
-      timestamp: new Date(Date.now() - 3600000) // 1 hour ago
-    }
-  ]);
-
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      const newMessage = {
-        id: messages.length + 1,
-        text: message,
-        sender: 'me',
-        timestamp: new Date()
-      };
-      setMessages([...messages, newMessage]);
-      setMessage('');
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  return (
-    <div className="chat-overlay">
-      <div className="chat-window">
-        {/* Chat Header */}
-        <div className="chat-header">
-          <button className="back-btn" onClick={onClose}>
-            <ArrowLeft size={20} />
-          </button>
-          <div className="chat-user-info" onClick={onViewProfile}>
-            <img 
-              src={match.profileData.mainPhoto} 
-              alt={match.name} 
-              className="chat-avatar"
-            />
-            <div className="chat-user-details">
-              <h3>{match.profileData.name}</h3>
-              <span className="online-status">Online</span>
-            </div>
-          </div>
-          <div className="chat-actions">
-            {/* Placeholder for more actions */}
-          </div>
-        </div>
-
-        {/* Messages Area */}
-        <div className="messages-container">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`message ${msg.sender === 'me' ? 'sent' : 'received'}`}>
-              <div className="message-bubble">
-                <p>{msg.text}</p>
-                <small className="message-time">
-                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </small>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Message Input */}
-        <div className="message-input-container">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type a message..."
-            className="message-input"
-          />
-          <button 
-            onClick={handleSendMessage}
-            className="send-btn"
-            disabled={!message.trim()}
-          >
-            <Send size={20} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 
 // Matches component
@@ -291,13 +250,15 @@ function MatchesTab({ onUnmatch }) {
       
       {/* Chat Window */}
       {chatMatch && !showProfileCard && (
-        <ChatWindow 
-          match={chatMatch} 
+        <ChatWindow
+          match={chatMatch}
           onClose={() => setChatMatch(null)}
           onViewProfile={() => {
             setSelectedMatch(chatMatch);
             setShowProfileCard(true);
           }}
+          saveChatMessageToDB={saveChatMessageToDB}
+          getChatMessagesFromDB={getChatMessagesFromDB}
         />
       )}
       
