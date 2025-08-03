@@ -136,6 +136,16 @@ const getChatMessagesFromDB = async (matchName) => {
   }
 };
 
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 // Transform JSON data to match the expected profile structure
 function getRandomPrompts(promptsArray, n) {
   const used = new Set();
@@ -151,7 +161,7 @@ function getRandomPrompts(promptsArray, n) {
   return result;
 }
 
-const sampleProfiles = profilesData.map((profile, index) => ({
+const sampleProfiles = shuffleArray(profilesData).map((profile, index) => ({
   id: index + 1,
   name: profile.name,
   age: parseInt(profile.original_data?.Personal?.Age) || 25,
