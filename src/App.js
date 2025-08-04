@@ -177,7 +177,8 @@ const sampleProfiles = shuffleArray(profilesData).map((profile, index) => ({
   photos: profile.images || ['https://via.placeholder.com/400x600'],
   instagram: profile.original_data?.Instagram || null,
   professions: profile.original_data?.Personal?.Professions || 'Unknown',
-  ps: profile.original_data?.Personal?.Professions.toLowerCase().match(/adult|porn/),
+  ps: (profile.original_data?.Personal?.Professions || 'Unknown').toLowerCase().match(/adult|porn/),
+  sexuality: profile.original_data?.Personal?.Sexuality || 'Unknown',
   prompts: getRandomPrompts(hingePrompts, 3)
 }));
 

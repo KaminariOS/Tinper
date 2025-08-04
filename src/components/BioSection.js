@@ -6,10 +6,6 @@ function BioSection({ profile }) {
       {/* Single unified grid with vertical separator */}
       <div className="bio-unified-grid">
         <div className="bio-grid-item">
-          <span className="bio-label">🌍</span>
-          <span className="bio-value">{profile.nationality}</span>
-        </div>
-        <div className="bio-grid-item">
           <span className="bio-label">📏</span>
           <span className="bio-value">{profile.height}</span>
         </div>
@@ -24,6 +20,10 @@ function BioSection({ profile }) {
         <div className="bio-grid-item">
           <span className="bio-label">🧬</span>
           <span className="bio-value">{profile.ethnicity}</span>
+        </div>
+        <div className="bio-grid-item">
+          <span className="bio-label">🧲</span>
+          <span className="bio-value">{profile.sexuality}</span>
         </div>
         {profile.birthplace && (
           <div className="bio-grid-item">
