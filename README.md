@@ -1,5 +1,7 @@
 # Tinper: A Dating App Simulator with Real Profiles
 
+![Screenshot](public/animation.gif)
+
 Tinper is a dating app simulator that mimics the experience of popular dating platforms. Swipe right on profiles you like, initiate conversations, and see where it goes! This simulator is designed for entertainment and educational purposes, allowing users to experience dating app mechanics without real-world consequences. Currently it only have profiles of women because of data availability.
 
 ## Features
