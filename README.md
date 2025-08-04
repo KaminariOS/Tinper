@@ -1,8 +1,6 @@
-# Tinper: A Dating App Simulator for Collectors
+# Tinper: A Dating App Simulator with Real Profiles
 
-This project was bootstrapped with Cursor.ai and Windsurf.
-
-Tinper is a dating app simulator that mimics the experience of popular dating platforms. Swipe right on profiles you like, initiate conversations, and see where it goes! This simulator is designed for entertainment and educational purposes, allowing users to experience dating app mechanics without real-world consequences.
+Tinper is a dating app simulator that mimics the experience of popular dating platforms. Swipe right on profiles you like, initiate conversations, and see where it goes! This simulator is designed for entertainment and educational purposes, allowing users to experience dating app mechanics without real-world consequences. Currently it only have profiles of women because of data availability.
 
 ## Features
 
@@ -15,6 +13,16 @@ Tinper is a dating app simulator that mimics the experience of popular dating pl
 - **Statistics Tracking**: Monitor your swiping habits with detailed statistics on likes and passes
 - **Persistent Data Storage**: All your swipes and conversations are saved locally using IndexedDB
 - **Mobile-First Design**: Responsive interface that works well on mobile devices
+
+## Note
+Even though dating apps get notorious for bad user experience these days, I always find the swiping UI/UX quite innovative and addictive.
+
+Crafting a Tinder clone from scratch would cost me too much time, but the advent of AI coding agents like Cursor.ai, Windsurf and Blackbox greatly speed up the development process.
+
+I have heard about AI coding agents a lot but this is my first time trying to build something with it.
+
+The result is way beyond my expection: AI can write 90% of the code with minimal effort. However, the rest 10% of debugging and tweaking will take up 90% of your time. 
+
 
 ## Disclaimers
 
